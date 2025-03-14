@@ -1,4 +1,4 @@
-pandas==2.0.3
-plotly==5.9.0
-streamlit==1.43.2
-setuptools==65.5.1
+pandas
+plotly
+streamlit
+setuptools
