@@ -3,3 +3,4 @@ plotly
 streamlit
 setuptools
 scikit-learn
+openpyxl
