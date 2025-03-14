@@ -14,13 +14,13 @@ st.title("卫星遥测量监控系统")
 # 模板文件上传
 uploaded_template = st.file_uploader("请上传模板文件（包含需要显示的列）", type=['xlsx', 'xls'], key='template')
 
-# 数据文件上传
-uploaded_data_m = st.file_uploader("请上传遥测量慢包数据文件", type=['xlsx', 'xls'], key='data')
+# 慢包数据文件上传
+uploaded_data_m = st.file_uploader("请上传遥测量慢包数据文件", type=['xlsx', 'xls'], key='data_m')
 
 # 快包数据文件上传
-uploaded_data_k = st.file_uploader("请上传遥测量快包数据文件", type=['xlsx', 'xls'], key='data')
+uploaded_data_k = st.file_uploader("请上传遥测量快包数据文件", type=['xlsx', 'xls'], key='data_k')
 
-if uploaded_template is not None and (uploaded_data_m is not None or uploaded_data_k is not None):
+if uploaded_template is not None and uploaded_data_m is not None and uploaded_data_k is not None:
     # 读取Excel文件
     # 读取模板文件的第一个工作表获取需要显示的列
     template_df = pd.read_excel(uploaded_template,sheet_name="通信情况专项")
