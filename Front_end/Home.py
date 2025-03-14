@@ -15,10 +15,10 @@ st.title("卫星遥测量监控系统")
 uploaded_template = st.file_uploader("请上传模板文件（包含需要显示的列）", type=['xlsx', 'xls'], key='template')
 
 # 数据文件上传
-uploaded_data_m = st.file_uploader("请上传遥测量慢包数据文件", type=['xlsx', 'xls'], key='data_m')
+uploaded_data_m = st.file_uploader("请上传遥测量慢包数据文件", type=['xlsx', 'xls'], key='data')
 
 # 快包数据文件上传
-uploaded_data_k = st.file_uploader("请上传遥测量快包数据文件", type=['xlsx', 'xls'], key='data_k')
+uploaded_data_k = st.file_uploader("请上传遥测量快包数据文件", type=['xlsx', 'xls'], key='data')
 
 if uploaded_template is not None and (uploaded_data_m is not None or uploaded_data_k is not None):
     # 读取Excel文件
