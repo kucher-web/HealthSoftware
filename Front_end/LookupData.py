@@ -4,13 +4,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 import Functions as f
 
+# 设置页面标题和布局
+st.set_page_config(page_title="卫星遥测量监控", layout="wide")
+
 def main():
 
-    # 设置页面标题和布局
-    st.set_page_config(page_title="卫星遥测量监控系统", layout="wide")
-
     # 显示主标题
-    st.title("卫星遥测量监控系统")
+    st.title("卫星遥测量监控")
 
     # 创建文件上传功能
     # 模板文件上传
