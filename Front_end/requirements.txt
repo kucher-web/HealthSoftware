@@ -4,3 +4,4 @@ streamlit
 setuptools
 scikit-learn
 openpyxl
+streamlit_option_menu
