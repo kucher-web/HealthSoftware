@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import satellite
 
 # 处理快包数据
 def template_filter(df, template_df):
@@ -39,3 +40,26 @@ def calculate_angles(df, qv_option):
         phi = 2;
     
     return theta, phi
+
+# 筛选数据
+def filter_data_angle(df):
+    # 只保留与俯仰角和方位角计算相关的列
+    # 删除只有一个非重复值的列
+    columns = [col for col in df.columns if df[col].nunique() > 1]
+    df = df[columns]
+    # 把遥测代号和遥测名称合并，用于后续的图表展示
+    df['遥测'] = df['遥测代号'] + '_' + df['遥测名称']
+    df = df.drop(['遥测代号', '遥测名称','采集时间'], axis=1)
+    # 只需要一部分数据，输入需要的遥测名称
+    columns = ['TMK505', 'TMK506', 'TMK507', 'TMK508', 'TMK509', 'TMK510', 'TMZ148', 'TMZ150', 'TMZ151','TMZ152','TMZ153', 'TMO108', 'TMO109', 'TMO110', 'TMO111', 'TMO112', 'TMO113', 'TMO114', 'TMO115', 'TMZ067', 'TMZ068']
+    # 查找遥测列中包含columns中的元素的行
+    filtered_df = df[df['遥测'].notna()]  # First, filter out rows with NaN values in '遥测' column
+    filtered_df = filtered_df[filtered_df['遥测'].str.contains('|'.join(columns))]
+
+    # 新建一个表格，序列为星上时间，列为遥测名称，值为实际值
+    df_pivot = filtered_df.pivot(index='星上时间', columns='遥测', values='实际值')
+    # 重置索引
+    df_pivot = df_pivot.reset_index()
+    df_pivot
+    return df_pivot
+    

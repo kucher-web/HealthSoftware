@@ -25,7 +25,8 @@ def main():
     if uploaded_template is not None and uploaded_data_m is not None and uploaded_data_k is not None:
         # 读取Excel文件
         # 读取模板文件的第一个工作表获取需要显示的列
-        template_df = pd.read_excel(uploaded_template,sheet_name="通信情况专项")
+        # 需要保留第一行数据，第一行数据不是列名
+        template_df = pd.read_excel(uploaded_template, sheet_name=0, header=None)
         # 读取慢包数据文件
         df_m = pd.read_excel(uploaded_data_m)
 
