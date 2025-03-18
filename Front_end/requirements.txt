@@ -5,3 +5,5 @@ setuptools
 scikit-learn
 openpyxl
 streamlit_option_menu
+datetime
+numpy

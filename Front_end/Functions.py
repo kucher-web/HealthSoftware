@@ -27,3 +27,15 @@ def DeleteYM(df):
     df = df.loc[:, ~df.columns.str.contains('源码')]
     return df
 
+# 俯仰角和方位角的计算
+def calculate_angles(df, qv_option):
+    # 这里是计算俯仰角和方位角的逻辑
+    # 这只是一个示例，您需要根据实际的计算方法来实现这个函数
+    if qv_option == "QV1":
+        theta = 1;
+        phi = 1;
+    else:  # QV2
+        theta = 2;
+        phi = 2;
+    
+    return theta, phi
