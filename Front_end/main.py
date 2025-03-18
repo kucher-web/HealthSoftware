@@ -3,9 +3,9 @@ from streamlit_option_menu import option_menu
 import LookupData
 import AngleCalculation
 
-st.set_page_config(page_title="卫星遥测量监控系统", layout="wide")
-
 def main():
+    st.set_page_config(page_title="卫星遥测量监控系统", layout="wide")
+
     with st.sidebar:
         selected = option_menu(
             menu_title="主菜单",
