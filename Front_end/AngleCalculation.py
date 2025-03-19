@@ -27,31 +27,28 @@ def main():
         # 将'星上时间'列转换为datetime类型
         df['星上时间'] = pd.to_datetime(df['星上时间'])
 
-        # 时间范围选择
-        min_datetime = df['星上时间'].min()
-        max_datetime = df['星上时间'].max()
+        # 获取星上时间列表
+        time_list = df['星上时间'].tolist()
+        total_points = len(time_list)
         
-        st.subheader("选择时间范围")
+        st.subheader("选择数据范围")
         
-        # 计算总的时间范围（以分钟为单位）
-        total_minutes = int((max_datetime - min_datetime).total_seconds() / 60)
-
-        # 使用滑块选择时间范围
-        selected_minutes = st.slider(
-            "选择时间范围（分钟）",
+         # 使用滑块选择数据范围
+        selected_range = st.slider(
+            "选择数据范围",
             min_value=0,
-            max_value=total_minutes,
-            value=(0, total_minutes)
+            max_value=total_points - 1,
+            value=(0, total_points - 1)
         )
 
         # 计算选定的开始和结束时间
-        start_datetime = min_datetime + timedelta(minutes=selected_minutes[0])
-        end_datetime = min_datetime + timedelta(minutes=selected_minutes[1])
+        start_datetime = time_list[selected_range[0]]
+        end_datetime = time_list[selected_range[1]]
 
         # 显示选定的时间范围
         st.write(f"选定的开始时间: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
         st.write(f"选定的结束时间: {end_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
-
+        
         # 筛选时间范围内的数据
         mask = (df['星上时间'] >= start_datetime) & (df['星上时间'] <= end_datetime)
         df_filtered = df.loc[mask]
