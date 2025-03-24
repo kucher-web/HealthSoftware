@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import satellite
+import numpy as np
+from wuchafenxi0922 import wuchafenxi_py
 
 # 处理快包数据
 def template_filter(df, template_df):
@@ -28,19 +30,6 @@ def DeleteYM(df):
     df = df.loc[:, ~df.columns.str.contains('源码')]
     return df
 
-# 俯仰角和方位角的计算
-def calculate_angles(df, qv_option):
-    # 这里是计算俯仰角和方位角的逻辑
-    # 这只是一个示例，您需要根据实际的计算方法来实现这个函数
-    if qv_option == "QV1":
-        theta = 1;
-        phi = 1;
-    else:  # QV2
-        theta = 2;
-        phi = 2;
-    
-    return theta, phi
-
 # 筛选数据
 def filter_data_angle(df):
     # 只保留与俯仰角和方位角计算相关的列
@@ -62,4 +51,64 @@ def filter_data_angle(df):
     df_pivot = df_pivot.reset_index()
     df_pivot
     return df_pivot
+
+def calculate_angle(df_pivot):
+    # 开始提取数据并进行相应计算
+    # 1. 找到TMZ148出现的时间，找到对应的TMO110~115的值，作为TMO轨道数据
+    # 只保留TMZ148不为空的行，以及下面一行
+    notna_index = df_pivot[df_pivot['TMZ148_馈电指向时间_秒'].notna()].index
+    df_calculate = df_pivot[df_pivot['TMZ148_馈电指向时间_秒'].notna()]
+
+    # 找到TMZ148的下一行
+    next_index = notna_index + 1
+    df_calculate = pd.concat([df_calculate, df_pivot.loc[next_index]], axis=0)	# 把下一行加入到df_calculate中
+    # 重置索引,按照星上时间排序
+    df_calculate = df_calculate.sort_values(by='星上时间')
+    df_calculate = df_calculate.reset_index(drop=True)
+    
+    # 开始计算
+    # TMO110~115的值是轨道数据，提取6*3的数据
+    # 6行数据，每行3个数据，不要空值
+    TMO110 = df_calculate['TMO110_WGS84短时外推位置X'].dropna()
+    TMO111 = df_calculate['TMO111_WGS84短时外推位置Y'].dropna()
+    TMO112 = df_calculate['TMO112_WGS84短时外推位置Z'].dropna()
+    TMO113 = df_calculate['TMO113_WGS84短时外推速度X'].dropna()
+    TMO114 = df_calculate['TMO114_WGS84短时外推速度Y'].dropna()
+    TMO115 = df_calculate['TMO115_WGS84短时外推速度Z'].dropna()
+    TMO_data = np.array([TMO110, TMO111, TMO112, TMO113, TMO114, TMO115])
+    TMO_data = TMO_data.T
+
+    # TMK505~510的值是姿态数据，提取6*3的数据
+    # 6行数据，每行3个数据，不要空值
+    TMK505 = df_calculate['TMK505_轨道系姿态角EulerX'].dropna()
+    TMK506 = df_calculate['TMK506_轨道系姿态角EulerY'].dropna()
+    TMK507 = df_calculate['TMK507_轨道系姿态角EulerZ'].dropna()
+
+    TMK508 = df_calculate['TMK508_轨道系角速度wbox'].dropna()
+    TMK509 = df_calculate['TMK509_轨道系角速度wboy'].dropna()
+    TMK510 = df_calculate['TMK510_轨道系角速度wboz'].dropna()
+    # 6*3的数据
+    ALPHA_data = np.array([TMK505, TMK506, TMK507])
+
+
+    # W
+    W_data = np.array([TMK508, TMK509, TMK510])
+    W_data = W_data.T
+    # 获取USER_POS数据
+    USER_POS = np.array([313437, 4770653, 4208987])
+
+    # 获取RV数据
+    RV = TMO_data.astype(float)
+
+    # 获取ALPHA数据,TMK505~507
+    ALPHA = ALPHA_data.astype(float)
+
+    # 获取W数据,TMK508~510
+    W = W_data.astype(float)
+
+    # 把数据带入进行计算
+    theta ,phi , rang = wuchafenxi_py(USER_POS, RV, ALPHA, W)
+
+    return theta, phi
+
     

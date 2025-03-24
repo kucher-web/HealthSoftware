@@ -63,16 +63,18 @@ def main():
         if st.button("计算俯仰角和方位角"):
             # 这里添加俯仰角和方位角的计算逻辑
             # 假设我们有一个函数来计算俯仰角和方位角
-            df_filtered['俯仰角'], df_filtered['方位角'] = f.calculate_angles(df_filtered, qv_option)
-
-            # 创建图表
-            fig = px.scatter(df_filtered, x='星上时间', y=['俯仰角', '方位角'], 
-                             title=f"{qv_option} 俯仰角和方位角")
-            st.plotly_chart(fig)
+            theta, phi = f.calculate_angle(df_filtered)
 
             # 显示计算结果表格
             st.subheader("计算结果")
-            st.dataframe(df_filtered[['星上时间', '俯仰角', '方位角']])
+            # 创建一个数据框来存储结果
+            results_df = pd.DataFrame({
+                '俯仰角': theta,
+                '方位角': phi
+            })
+
+            # 显示结果表格
+            st.table(results_df)
 
     else:
         st.info("请上传遥测量数据文件")
