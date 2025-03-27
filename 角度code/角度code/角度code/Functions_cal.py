@@ -337,7 +337,7 @@ def compare_wuchafenxi0922():
     import numpy as np
     import matplotlib.pyplot as plt
     import matlab.engine
-    from Front_end.wuchafenxi0922 import wuchafenxi0922 as wuchafenxi0922_py
+    from wuchafenxi0922 import wuchafenxi0922 as wuchafenxi0922_py
 
     print("开始比较 MATLAB 和 Python 的 wuchafenxi0922 实现...")
 
@@ -444,9 +444,6 @@ def compare_wuchafenxi0922():
     
     plt.tight_layout()
     plt.show()
-    
-    # 执行比较函数
-    compare_wuchafenxi0922()  
 
 def qv_python():
     """

@@ -4,28 +4,27 @@ from Functions_cal import siyuanshuchengfa, OutExtra
 
 
 def wuchafenxi_py(USER_POS,RV,ALPHA,W):
-    # 用户位置
-    X, Y, Z = USER_POS
 
     n = RV.shape[0]
+    RV_temp = RV.copy()
     k = []
     
 
     # 做轨道插值
     for i in range(n-1) :
-        k.append((RV[i+1] - RV[i]) / (64 * 1000))  # 64秒的线性插值率
+        k.append((RV_temp[i+1] - RV_temp[i]) / (64 * 1000))  # 64秒的线性插值率
 
     
     for i in range(n) :
         if i == 0:  # 第一项用k1
-            RV[i] = RV[i] - k[i]*2750
+            RV_temp[i] = RV_temp[i] - k[i]*2750
         else: 
-            RV[i] = RV[i] - k[i-1]*2750
+            RV_temp[i] = RV_temp[i] - k[i-1]*2750
 
     # 分解ALPHA
-    ALPHAX = ALPHA[0]
-    ALPHAY = ALPHA[1]
-    ALPHAZ = ALPHA[2]
+    ALPHAX = ALPHA[0] * np.pi /180
+    ALPHAY = ALPHA[1] * np.pi /180
+    ALPHAZ = ALPHA[2] * np.pi /180
 
     # 计算四元数
     Q1 = np.zeros((n, 4))
@@ -54,7 +53,7 @@ def wuchafenxi_py(USER_POS,RV,ALPHA,W):
 
     # 
     for i in range(n):
-        rv_temp = RV[i]
+        rv_temp = RV_temp[i]
         Qe = Q[i]
 
         # 84坐标系转轨道系
