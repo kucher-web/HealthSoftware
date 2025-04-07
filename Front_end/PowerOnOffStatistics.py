@@ -28,6 +28,9 @@ def main():
                     else:
                         # 假设txt文件是CSV格式
                         df = pd.read_csv(file, sep='\t')
+
+                    # 先对数据进行处理，需要根据时间戳排序
+                    df = df.sort_values('timestamp')
                     
                     # 统计总时长和开关机时间
                     start_time = []
