@@ -2,14 +2,15 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import LookupData
 import AngleCalculation
+import PowerOnOffStatistics
 
 def main():
     
     with st.sidebar:
         selected = option_menu(
             menu_title="主菜单",
-            options=["首页", "数据分析", "俯仰角方位角计算", "系统设置", "关于"],
-            icons=["house", "graph-up", "calculator", "gear", "info-circle"],
+            options=["首页", "数据分析", "俯仰角方位角计算", "载管开关机时间统计", "系统设置", "关于"],
+            icons=["house", "graph-up", "calculator", "power", "gear", "info-circle"],
             menu_icon="cast",
             default_index=0,
         )
@@ -24,12 +25,18 @@ def main():
             selected = "数据分析"
         if st.button("进入俯仰角方位角计算"):
             selected = "俯仰角方位角计算"
+        if st.button("进入载管开关机时间统计"):
+            selected = "载管开关机时间统计"
 
     if selected == "数据分析":
         LookupData.main()
 
     if selected == "俯仰角方位角计算":
         AngleCalculation.main()
+        
+    if selected == "载管开关机时间统计":
+        PowerOnOffStatistics.main()
+        
     if selected == "系统设置":
         st.title("系统设置")
         st.write("这里是系统设置页面，您可以在这里调整各种参数和选项。")
